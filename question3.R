@@ -109,6 +109,7 @@ rev.list.nomar <- na.omit(rev.list[match(rev.list$airbnb_listing_id,detail.nomar
 cat("Listings including word 'praia' make ",
     round(sum(rev.list.praia[,2])/sum(rev.list.nopraia[,2])*100,1),
     "% more revenue")
+
 cat("Listings including word 'mar' make ",
     round(sum(rev.list.mar[,2])/sum(rev.list.nomar[,2])*100,1),
     "% more revenue")
