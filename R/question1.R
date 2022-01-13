@@ -5,10 +5,10 @@ library(tidyverse)
 rm(list=ls())
 
 #load files
-detail <- as.data.frame(read.csv("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/main/data/desafio_details.csv",
-                                 encoding = "UTF-8"))
-#prices <- as.data.frame(read.csv("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/main/data/desafio_priceav.csv",
-#                                 encoding = "UTF-8"))
+detail <- read.csv("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/main/data/desafio_details.csv",
+                                 encoding = "UTF-8")
+#prices <- data.table::fread("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/main/data/desafio_priceav.csv",
+#                                 encoding = "UTF-8")
 
 #head(detail)
 #head(prices)
