@@ -38,7 +38,7 @@ rev.sub.avg <- within(rev.sub.avg, suburb <- factor(suburb,levels=names(sort(tab
 #plot results
 ggplot(rev.sub.avg, aes(x = reorder(suburb, price_string), y=price_string))+
   geom_bar(stat = "identity", fill=c(2:(length(unique(rev.sub.avg$price_string))+1)))+
-  labs(x="Bairro", y="Faturamento médio (R$)")+
+  labs(x="Bairro", y="Faturamento m?dio (R$)")+
   theme(axis.text.x = element_text(size = 15, angle = 45, vjust = 1, hjust = 1),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),

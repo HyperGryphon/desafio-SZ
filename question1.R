@@ -20,7 +20,7 @@ detail <- within(detail, suburb <- factor(suburb,levels=names(sort(table(suburb)
 #plot results
 ggplot(detail, aes(x = suburb))+
   geom_bar(fill=c(2:(length(unique(detail$suburb))+1)))+
-  labs(x="Bairro", y="Nº de listings")+
+  labs(x="Bairro", y="N? de listings")+
   theme(axis.text.x = element_text(size = 15, angle = 45, vjust = 1, hjust = 1),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),

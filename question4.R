@@ -30,7 +30,7 @@ dim(prices[is.weekend(prices$date),])
 dim(prices)
 
 #average antecedence by listing
-ant.list<-aggregate(prices$diff, 
+ant.list<-aggregate(prices$diff,
                     list(prices$airbnb_listing_id),
                     mean)
 colnames(ant.list)<-c("airbnb_listing_id","avg antecedence")

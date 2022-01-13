@@ -15,7 +15,7 @@ prices <- as.data.frame(read.csv("https://raw.githubusercontent.com/HyperGryphon
 #head(prices)
 
 #average revenue by listing
-rev.list<-aggregate(prices$price_string[which(prices$occupied==0)], 
+rev.list<-aggregate(prices$price_string[which(prices$occupied==0)],
                     list(prices$airbnb_listing_id[which(prices$occupied==0)]),
                     sum)
 colnames(rev.list)<-c("airbnb_listing_id","summed")
