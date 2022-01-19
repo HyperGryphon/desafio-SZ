@@ -1,65 +1,24 @@
-# desafio-SZA
-This is a line from RStudio
+# Desafio Seazone
 
-# Project Title
-
-Simple overview of use/purpose.
+This is a technical challenge from Seazone for the position of data analyst.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+The aim is to answer some established questions involving two datasets: one including Airbnb listings and other with the prices of some of those listings and whether they were rented during a time period. The questions asked are:
 
-## Getting Started
+1. Sort neighbourhoods by ascending order of listings
+2. Sort neighbourhoods by ascending order of average revenue of listings
+3. Look for correlations between listings's characteristics and revenue
+4. How far in advance do guests book?
 
-### Dependencies
+Each R script answers a specific question and so they are written to work independently from one another.
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+## Packages used
 
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+Each question is answered in a specific R script. The following R packages were used: 
+* [tidyverse](https://www.tidyverse.org/) to clean and organize the data.
+* [chron](https://cran.r-project.org/web/packages/chron/index.html) to treat time series.
+* [data.table](https://github.com/Rdatatable/data.table) was used to read .csv files quicker.
+* [corrplot](https://github.com/taiyun/corrplot) to produce correlation plots.
+* [wordcloud](https://cran.r-project.org/web/packages/wordcloud/index.html), [wordcloud2](https://cran.r-project.org/web/packages/wordcloud2/index.html), and [tm](https://cran.r-project.org/web/packages/tm/index.html) for text mining and look for most used words.
+* [patchwork](https://cran.r-project.org/web/packages/patchwork/index.html) easily generated combined graphs from ggplot2.
