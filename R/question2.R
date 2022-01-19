@@ -38,10 +38,10 @@ png("neighborhood_by_avgrevenue.png", height = 1200, width = 1600, units = "px")
 ggplot(rev.sub, aes(x = reorder(suburb, meanrev), y=meanrev))+
   geom_bar(stat = "identity", fill=c(2:(length(unique(rev.sub$meanrev))+1)))+
   labs(x="Bairro", y="Faturamento médio (R$)")+
-  theme(axis.text.x = element_text(size = 30, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 30),
-        axis.title.x = element_text(size = 40),
-        axis.title.y = element_text(size = 40),
+  theme(axis.text.x = element_text(size = 40, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 40),
+        axis.title.x = element_text(size = 50),
+        axis.title.y = element_text(size = 50),
         axis.ticks = element_line(size = 2),
         axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))

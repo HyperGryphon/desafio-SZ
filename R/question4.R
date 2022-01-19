@@ -66,9 +66,9 @@ g1<-ggplot(ant.sub.t, aes(x=reorder(suburb, `avg antecedence`), y = `avg anteced
   labs(x="", y="Dias")+
   geom_text(x=1, y=10, label="Finais de semana", size = 20, hjust = 0)+
   theme(axis.text.x = element_blank(),# text(size = 15, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 30),
-        axis.title.x = element_text(size = 40),
-        axis.title.y = element_text(size = 40),
+        axis.text.y = element_text(size = 40),
+        axis.title.x = element_text(size = 50),
+        axis.title.y = element_text(size = 50),
         axis.ticks = element_line(size = 2),
         axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))
@@ -76,15 +76,15 @@ g2<-ggplot(ant.sub.f, aes(x=reorder(suburb, `avg antecedence`), y = `avg anteced
   geom_bar(stat = "identity",fill=c(2:(length(unique(ant.sub.f$suburb))+1)))+
   labs(x="Bairro", y="Dias")+
   geom_text(x=1, y=10, label="Dias úteis", size = 20, hjust = 0)+
-  theme(axis.text.x = element_text(size = 30, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 30),
-        axis.title.x = element_text(size = 40),
-        axis.title.y = element_text(size = 40),
+  theme(axis.text.x = element_text(size = 40, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 40),
+        axis.title.x = element_text(size = 50),
+        axis.title.y = element_text(size = 50),
         axis.ticks = element_line(size = 2),
         axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))
 
-png("book_advance.png", height = 1600, width = 1200, units = "px")
+png("book_advance.png", height = 2000, width = 1600, units = "px")
 g1+g2+plot_layout(ncol=1)+plot_annotation(
   title = 'Antecedência em dias')&
   theme(plot.title = element_text(size = 60, hjust = 0.5))
