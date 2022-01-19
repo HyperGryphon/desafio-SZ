@@ -1,6 +1,5 @@
 #load required packages
-library(tidyverse)
-library(chron)
+library(tidyverse); library(chron); library(patchwork)
 
 #remove previous data
 rm(list=ls())
@@ -24,81 +23,69 @@ prices$date<-as.Date(prices$date)
 prices$diff<-abs(as.numeric(difftime(prices$booked_on,prices$date,units="days")))
 
 #divide between weekends and weekdays
+#t(true): weekends, f(false): weekdays
 prices.t<-prices[is.weekend(prices$date)==T,]
-
-#dim(prices[is.weekend(prices$date),])
-#dim(prices)
-
-#average antecedence by listing
-ant.list.t<-aggregate(prices.t$diff,
-                    list(prices.t$airbnb_listing_id),
-                    mean)
-colnames(ant.list.t)<-c("airbnb_listing_id","avg antecedence")
+prices.f<-prices[is.weekend(prices$date)==F,]
 
 #average antecedence by suburb
 ant.sub.t<-aggregate(prices.t$diff, 
                    list(prices.t$suburb),
-                   mean)
+                   median)
 colnames(ant.sub.t)<-c("suburb","avg antecedence")
-
-#head(ant.sub.t)
-#head(ant.list.t)
-
-prices.f<-prices[is.weekend(prices$date)==F,]
-
-#average antecedence by listing
-ant.list.f<-aggregate(prices.f$diff,
-                      list(prices.f$airbnb_listing_id),
-                      mean)
-colnames(ant.list.f)<-c("airbnb_listing_id","avg antecedence")
 
 #average antecedence by suburb
 ant.sub.f<-aggregate(prices.f$diff, 
                      list(prices.f$suburb),
-                     mean)
+                     median)
 colnames(ant.sub.f)<-c("suburb","avg antecedence")
 
 #head(ant.sub.f)
-#head(ant.list.f)
 
-cat("By listings, the antecedence in case of weekends is",
-    round(mean(ant.list.t[which(ant.list.t[,2]<=median(ant.list.t[,2])),2]),1),"days")
+cat("Median of the antecedence in case of weekends is",
+    round(median(ant.sub.t[,2]),1),"days")
 
-cat("By suburbs, the antecedence in case of weekends is",
-    round(mean(ant.sub.t[,2]),1),"days")
+cat("Median of the antecedence in case of weekdays is",
+    round(median(ant.sub.f[,2]),1),"days")
 
-cat("By listings, the antecedence in case of weekdays is",
-    round(mean(ant.list.f[which(ant.list.f[,2]<=median(ant.list.f[,2])),2]),1),"days")
-
-cat("By suburbs, the antecedence in case of weekdays is",
-    round(mean(ant.sub.f[,2]),1),"days")
-
-#plot by listings
+#plot distributions
+png("kde_book_advance.png", height = 800, width = 1200, units = "px")
 par(mar=c(5,5,1.5,1.5))
-plot(density(ant.list.t[,2]), main="", col = 1, #log = "x",
-     ylab = "", xlab = "Dias de antecedência", lwd = 2, cex.axis=1.2,cex.lab=1.5)
-lines(density(ant.list.f[,2]), main="", col = 2, lwd = 2, cex.axis=1.2,cex.lab=1.5)
-legend("topright",legend=c("Fins de semana", "Dias normais"), 
-       lwd = 2, col = c(1,2), lty = 1, bty = "n", cex = 2)
+plot(density(prices.f$diff), main="", col = 1, xlim = c(-5,60),#log = "x",
+     ylab = "", xlab = "Dias de antecedência", lwd = 2, cex.axis=2.4,cex.lab=3)
+abline(v=median((prices.f$diff)), lwd=2, lty = 2, col = 1)
+lines(density(prices.t$diff), main="", col = 2, lwd = 2, cex.axis=2.4,cex.lab=3)
+abline(v=median((prices.t$diff)), lwd=2, lty = 2, col = 2)
+legend("topright",legend=c(paste("Mediana para dias úteis:", median(prices.f$diff), "dias"), 
+                           paste("Mediana para finais de semana:", median(prices.t$diff), "dias")), 
+       lwd = 2, col = c(1,2), lty = 2, bty = "n", cex = 3)
+dev.off()
   
 #plot by suburbs
-ggplot(ant.sub.t, aes(x=reorder(suburb, `avg antecedence`), y = `avg antecedence`))+
+g1<-ggplot(ant.sub.t, aes(x=reorder(suburb, `avg antecedence`), y = `avg antecedence`))+
   geom_bar(stat = "identity",fill=c(2:(length(unique(ant.sub.t$suburb))+1)))+
-  labs(x="Bairro", y="Dias de antecedência em fins de semana")+
-  theme(axis.text.x = element_text(size = 15, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        axis.ticks = element_line(size = 1),
-        axis.ticks.length = unit(.2, "cm"),
+  labs(x="", y="Dias")+
+  geom_text(x=1, y=10, label="Finais de semana", size = 20, hjust = 0)+
+  theme(axis.text.x = element_blank(),# text(size = 15, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 30),
+        axis.title.x = element_text(size = 40),
+        axis.title.y = element_text(size = 40),
+        axis.ticks = element_line(size = 2),
+        axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))
-ggplot(ant.sub.f, aes(x=reorder(suburb, `avg antecedence`), y = `avg antecedence`))+
+g2<-ggplot(ant.sub.f, aes(x=reorder(suburb, `avg antecedence`), y = `avg antecedence`))+
   geom_bar(stat = "identity",fill=c(2:(length(unique(ant.sub.f$suburb))+1)))+
-  labs(x="Bairro", y="Dias de antecedência em fins de semana")+
-  theme(axis.text.x = element_text(size = 15, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        axis.ticks = element_line(size = 1),
-        axis.ticks.length = unit(.2, "cm"),
+  labs(x="Bairro", y="Dias")+
+  geom_text(x=1, y=10, label="Dias úteis", size = 20, hjust = 0)+
+  theme(axis.text.x = element_text(size = 30, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 30),
+        axis.title.x = element_text(size = 40),
+        axis.title.y = element_text(size = 40),
+        axis.ticks = element_line(size = 2),
+        axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))
+
+png("book_advance.png", height = 1600, width = 1200, units = "px")
+g1+g2+plot_layout(ncol=1)+plot_annotation(
+  title = 'Antecedência em dias')&
+  theme(plot.title = element_text(size = 60, hjust = 0.5))
+dev.off()

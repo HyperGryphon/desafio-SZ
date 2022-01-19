@@ -21,15 +21,17 @@ detail <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
 colnames(detail) <- c("suburb","count")
 
 #plot results
+png("neighborhood_by_listings.png", height = 1200, width = 1600, units = "px")
 ggplot(detail, aes(x = reorder(suburb, count), y=count))+
   geom_bar(stat="identity",fill=c(2:(length(unique(detail$suburb))+1)))+
   labs(x="Bairro", y="Nº de listings")+
-  theme(axis.text.x = element_text(size = 15, angle = 45, vjust = 1, hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        axis.ticks = element_line(size = 1),
-        axis.ticks.length = unit(.2, "cm"),
+  theme(axis.text.x = element_text(size = 30, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 30),
+        axis.title.x = element_text(size = 40),
+        axis.title.y = element_text(size = 40),
+        axis.ticks = element_line(size = 2),
+        axis.ticks.length = unit(.4, "cm"),
         plot.margin=unit(c(1,1,1,1),"cm"))
+dev.off()
   
         

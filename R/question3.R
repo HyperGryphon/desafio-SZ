@@ -44,47 +44,61 @@ avg.reviews<-aggregate(detail.sel$number_of_reviews,
                      list(detail.sel$airbnb_listing_id),
                      mean)
 
+#create dataframe
 data <- data.frame(rev.list, avg.price[,2], avg.rooms[,2],avg.baths[,2],avg.stars[,2],avg.reviews[,2])
-colnames(data) <- c("airbnb_listing_id","total revenue","avg price","nº rooms","nº baths","stars","reviews")
+colnames(data) <- c("airbnb_listing_id","Revenue","Avg price","Nº rooms","Nº baths","Stars","Reviews")
 
+#select only listings with all variables
 comp.data <- data[which(complete.cases(data)==T),]
 
-library(corrplot)
-#pdf("corrplot.pdf", height = 10, width = 12)
-#par(mar = c(5,5,1,1))
-corrplot(cor(comp.data[,-1])[1,1:6,drop=F], 
-         type = "upper", #order = "hclust", 
-         tl.col = "black", tl.srt = 45, 
-         diag = F, addCoef.col = "white")
-#dev.off()
+#qqplot to check for normality
+png("qqplot.png", height = 400, width = 500, units = "px")
+ggpubr::ggqqplot(comp.data$`Avg price`[comp.data$`Avg price`<2000], ylab = 'Preço',
+                 cex.axis=8, cex.lab=8)
+dev.off()
 
-#Let's do some text mining to see which words appear most
+#correlation plot
+library(corrplot)
+png("corrplot.png", height = 800, width = 2000, units = "px")
+#par(mar = c(5,5,1,1))
+corrplot(cor(comp.data[,-1], method = 'spearman')[1,1:6,drop=F], 
+         type = "upper", #order = "hclust", 
+         tl.col = "black", tl.srt = 45, tl.cex = 4, 
+         number.cex = 4, cl.cex = 2,
+         diag = F, addCoef.col = "black")
+dev.off()
+
+#Let's do some text mining to see which words appear most#######################
 #load required packages
 library(wordcloud)
 library(wordcloud2)
 library(tm)
 
+#extract vector with all words
 text <- detail$ad_name
 docs <- Corpus(VectorSource(text),
                readerControl = list(reader=readPlain,
                                     language="pt"))
 
+#clean text, eliminate punctuation, numbers, transform to lower case...
 docs <- docs %>%
   tm_map(removeNumbers) %>%
   tm_map(removePunctuation) %>%
   tm_map(stripWhitespace)
 docs <- tm_map(docs, content_transformer(tolower))
-docs <- tm_map(docs, removeWords, stopwords("english")) #where are the portuguese stopwords?
+docs <- tm_map(docs, removeWords, stopwords("english")) #is there a dictionary for portuguese stopwords?
 
+#create dataframe with unique words
 dtm <- TermDocumentMatrix(docs)
 matrix <- as.matrix(dtm) 
 words <- sort(rowSums(matrix),decreasing=TRUE) 
 df <- data.frame(word = names(words),freq=words)
-#select words we don't want to be included
+
+#select words we don't want to be included as I couldn't find portuguese stopwords
 df <- df[!(row.names(df) %in% 
              c("apartamento","para","com","nos","apto","dos","metros")),]
 
-head(df)
+#head(df)
 
 #uncomment to plot the wordcloud
 #set.seed(1234) # for reproducibility 
@@ -92,10 +106,11 @@ head(df)
 
 cat(sep = "",
     "Most repeated words are ",
-    df$word[1],", ",df$word[2],", and ",df$word[3])
+    df$word[1],", ",df$word[2],", ",df$word[3], ", ", df$word[4], ", and ", df$word[5])
 
+#calculate if these words make more money
 #choose word
-w <- "centro"
+w <- "jurerê"
 
 #retrieve detail including word "praia" and "mar"
 detail.inc <- detail[which(str_detect(detail$ad_name, w)==T & match(detail$airbnb_listing_id,rev.list$airbnb_listing_id)),]
