@@ -16,8 +16,8 @@ detail <- read.csv("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/ma
 #uncomment if you want only complete rows, omitting NAs 
 #detail <- detail[which(complete.cases(detail)==T),]
 
-#order by number of listings
-nlistings <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
+#number of listings per neighborhood
+nlistings <- as.data.frame(table(detail$suburb))
 colnames(nlistings) <- c("suburb","count")
 
 #plot results
