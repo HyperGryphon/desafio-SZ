@@ -19,8 +19,8 @@ prices <- data.table::fread("https://raw.githubusercontent.com/HyperGryphon/desa
 #add a column with suburbs
 prices$suburb<-detail$suburb[match(prices$airbnb_listing_id, detail$airbnb_listing_id)]
 
-#order by number of listings
-nlistings <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
+#number of rented listings per neighborhood
+nlistings <- as.data.frame(table(prices$suburb[which(prices$occupied==0)]))
 colnames(nlistings) <- c("suburb","count")
 
 #total revenue by suburb only for rented listings
