@@ -19,11 +19,19 @@ prices <- data.table::fread("https://raw.githubusercontent.com/HyperGryphon/desa
 #add a column with suburbs
 prices$suburb<-detail$suburb[match(prices$airbnb_listing_id, detail$airbnb_listing_id)]
 
-#average revenue by suburb
-rev.sub<-aggregate(prices$price_string[which(prices$occupied==0)], 
+#order by number of listings
+nlistings <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
+colnames(nlistings) <- c("suburb","count")
+
+#total revenue by suburb only for rented listings
+rev.sub <- aggregate(prices$price_string[which(prices$occupied==0)], 
           list(prices$suburb[which(prices$occupied==0)]),
-          mean)
-colnames(rev.sub) <- c("suburb","meanrev")
+          sum)
+colnames(rev.sub) <- c("suburb","sumrev")
+
+#estimate mean revenue by dividing total revenue by number of listings per neighborhood
+rev.sub <- merge(rev.sub, nlistings, by = c("suburb")) 
+rev.sub$meanrev <- rev.sub$sumrev/rev.sub$count
 
 #plot results
 png("neighborhood_by_avgrevenue.png", height = 1200, width = 1600, units = "px")

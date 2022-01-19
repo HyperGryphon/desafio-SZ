@@ -17,13 +17,13 @@ detail <- read.csv("https://raw.githubusercontent.com/HyperGryphon/desafio-SZ/ma
 #detail <- detail[which(complete.cases(detail)==T),]
 
 #order by number of listings
-detail <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
-colnames(detail) <- c("suburb","count")
+nlistings <- as.data.frame(sort(table(detail$suburb),decreasing=TRUE))
+colnames(nlistings) <- c("suburb","count")
 
 #plot results
 png("neighborhood_by_listings.png", height = 1200, width = 1600, units = "px")
-ggplot(detail, aes(x = reorder(suburb, count), y=count))+
-  geom_bar(stat="identity",fill=c(2:(length(unique(detail$suburb))+1)))+
+ggplot(nlistings, aes(x = reorder(suburb, count), y=count))+
+  geom_bar(stat="identity",fill=c(2:(length(unique(nlistings$suburb))+1)))+
   labs(x="Bairro", y="Nº de listings")+
   theme(axis.text.x = element_text(size = 30, angle = 45, vjust = 1, hjust = 1),
         axis.text.y = element_text(size = 30),
